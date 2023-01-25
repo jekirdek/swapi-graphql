@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import { Inter } from "@next/font/google";
 const inter = Inter({ subsets: ["latin"] });
@@ -9,61 +9,44 @@ import JSONPretty from "react-json-pretty";
 // ** MUI Imports
 import { Box } from "@mui/system";
 import CircleIcon from "@mui/icons-material/Circle";
-import {
-  ButtonGroup,
-  CircularProgress,
-  Grid,
-  ToggleButton,
-} from "@mui/material";
+import { CircularProgress, Grid, Typography } from "@mui/material";
 
 import axios from "axios";
-import PeopleListREST from "@/components/PeopleListREST";
-import PeopleListGraphQL from "@/components/PeopleListGraphQL";
 
-export default function Home() {
+export default function RestPage() {
   const [loading, setLoading] = useState(false);
-  const [selectedBtn, setSelectedBtn] = useState("");
   const [data, setData] = useState({});
 
-  // ** RESTful API fetch data
-  const restSelectHandler = () => {
+  useEffect(() => {
+    // ** GraphQL fetch data
     setLoading(true);
-    setSelectedBtn("rest");
 
-    const URL = "https://swapi.dev/api/" + "people";
-
-    axios
-      .get(URL)
-      .then((res) => setData(res.data))
-      .then(() => setLoading(false));
-  };
-
-  // ** GraphQL fetch data
-  const query = `
-query {
-  allPeople {
-    people {
-      gender
-      name
-      height
-      mass
-      birthYear
-    }
-  }
-}
-`;
-  const graphSelectHandler = () => {
-    setLoading(true);
-    setSelectedBtn("graph");
+    const query = `
+    query Person($personId: ID) {
+        person(personID: $personId) {
+          filmConnection {
+            films {
+              title
+              planetConnection {
+                planets {
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+  `;
 
     const URL = "https://swapi-graphql.netlify.app/.netlify/functions/index";
     axios
       .post(URL, {
         query,
+        variables: { personId: "1" },
       })
       .then((res) => setData(res.data))
       .then(() => setLoading(false));
-  };
+  }, []);
 
   return (
     <>
@@ -78,31 +61,22 @@ query {
           <Grid item xs={7}>
             <Grid container spacing={5}>
               <Grid item xs={12}>
-                <ButtonGroup>
-                  <ToggleButton
-                    onClick={restSelectHandler}
-                    color="info"
-                    selected={selectedBtn === "rest"}
-                  >
-                    Fetch REST
-                  </ToggleButton>
-                  <ToggleButton
-                    onClick={graphSelectHandler}
-                    color="error"
-                    selected={selectedBtn === "graph"}
-                  >
-                    Fetch GraphQL
-                  </ToggleButton>
-                </ButtonGroup>
-              </Grid>
-              <Grid item xs={12}>
                 {loading ? (
                   <CircularProgress />
-                ) : selectedBtn === "rest" ? (
-                  <PeopleListREST data={data} />
-                ) : selectedBtn === "graph" ? (
-                  <PeopleListGraphQL data={data} />
-                ) : null}
+                ) : (
+                  <Box>
+                    <Box>
+                      Movie: {data.data.person.filmConnection.films[1].title}
+                    </Box>
+                    <Box>
+                      Planet:
+                      {
+                        data.data.person.filmConnection.films[1]
+                          .planetConnection.planets[1].name
+                      }
+                    </Box>
+                  </Box>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -121,6 +95,7 @@ query {
                 <CircleIcon sx={{ fontSize: "0.7rem" }} color="info" />
                 <CircleIcon sx={{ fontSize: "0.7rem" }} color="error" />
               </Box>
+              <Typography color="white">/people/1</Typography>
               {loading ? <CircularProgress /> : <JSONPretty data={data} />}
             </Box>
           </Grid>
