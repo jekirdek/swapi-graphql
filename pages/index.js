@@ -19,8 +19,12 @@ import {
 import axios from "axios";
 import PeopleListREST from "@/components/PeopleListREST";
 import PeopleListGraphQL from "@/components/PeopleListGraphQL";
+import Image from "next/image";
 
 export default function Home() {
+  // ** For Fun :D
+  const [fly, setFly] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [selectedBtn, setSelectedBtn] = useState("");
   const [data, setData] = useState({});
@@ -80,6 +84,7 @@ query {
               <Grid item xs={12}>
                 <ButtonGroup>
                   <ToggleButton
+                    value="rest"
                     onClick={restSelectHandler}
                     color="info"
                     selected={selectedBtn === "rest"}
@@ -87,6 +92,7 @@ query {
                     Fetch REST
                   </ToggleButton>
                   <ToggleButton
+                    value="graph"
                     onClick={graphSelectHandler}
                     color="error"
                     selected={selectedBtn === "graph"}
@@ -106,22 +112,39 @@ query {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={5} sx={{ pr: 5 }}>
             <Box
+              className="relative"
               sx={{
                 p: 2,
                 pt: 1,
-                bgcolor: "#272822",
                 display: "flex",
                 flexDirection: "column",
               }}
             >
-              <Box sx={{ ml: "auto" }}>
-                <CircleIcon sx={{ fontSize: "0.7rem" }} color="success" />
+              <div className="layer" />
+              <div
+                onClick={() => {
+                  setFly(true);
+                }}
+                className={fly ? "absolute fly" : "absolute"}
+              >
+                <h1 className="strokeme">JEKİRDEK 💛</h1>
+                <Image
+                  src="/star-wars.png"
+                  alt="star-wars"
+                  width={180}
+                  height={180}
+                />
+              </div>
+              <Box sx={{ ml: "auto" }} className="z-index-front">
                 <CircleIcon sx={{ fontSize: "0.7rem" }} color="info" />
+                <CircleIcon sx={{ fontSize: "0.7rem" }} color="success" />
                 <CircleIcon sx={{ fontSize: "0.7rem" }} color="error" />
               </Box>
-              {loading ? <CircularProgress /> : <JSONPretty data={data} />}
+              <div className="z-index-front">
+                {loading ? <CircularProgress /> : <JSONPretty data={data} />}
+              </div>
             </Box>
           </Grid>
         </Grid>

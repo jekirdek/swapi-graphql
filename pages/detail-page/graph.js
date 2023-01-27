@@ -9,7 +9,7 @@ import JSONPretty from "react-json-pretty";
 // ** MUI Imports
 import { Box } from "@mui/system";
 import CircleIcon from "@mui/icons-material/Circle";
-import { CircularProgress, Grid, Typography } from "@mui/material";
+import { CircularProgress, Divider, Grid, Typography } from "@mui/material";
 
 import axios from "axios";
 
@@ -24,6 +24,11 @@ export default function RestPage() {
     const query = `
     query Person($personId: ID) {
         person(personID: $personId) {
+          gender
+          name
+          height
+          mass
+          birthYear
           filmConnection {
             films {
               title
@@ -66,14 +71,80 @@ export default function RestPage() {
                 ) : (
                   <Box>
                     <Box>
-                      Movie: {data.data.person.filmConnection.films[1].title}
+                      <h3>Person</h3>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Gender:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {data?.data?.person?.gender}
+                        </Typography>
+                      </div>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Name:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {data?.data?.person?.name}
+                        </Typography>
+                      </div>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Height:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {data?.data?.person?.height}
+                        </Typography>
+                      </div>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Mass:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {data?.data?.person?.mass}
+                        </Typography>
+                      </div>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Birth Year:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {data?.data?.person?.birthYear}
+                        </Typography>
+                      </div>
                     </Box>
+                    <Divider sx={{ my: 2 }} />
                     <Box>
-                      Planet:
-                      {
-                        data.data.person.filmConnection.films[1]
-                          .planetConnection.planets[1].name
-                      }
+                      <h3>Movie</h3>
+                      <Typography sx={{ display: "inline", color: "#374278" }}>
+                        Title:
+                      </Typography>
+                      <Typography sx={{ display: "inline" }} ml={1}>
+                        {data?.data?.person?.filmConnection?.films[1]?.title}
+                      </Typography>
+                    </Box>
+                    <Divider sx={{ my: 2 }} />
+                    <Box>
+                      <h3>Planet</h3>
+                      <Typography sx={{ display: "inline", color: "#374278" }}>
+                        Name:
+                      </Typography>
+                      <Typography sx={{ display: "inline" }} ml={1}>
+                        {
+                          data?.data?.person?.filmConnection?.films[1]
+                            ?.planetConnection?.planets[1]?.name
+                        }
+                      </Typography>
                     </Box>
                   </Box>
                 )}
@@ -95,7 +166,7 @@ export default function RestPage() {
                 <CircleIcon sx={{ fontSize: "0.7rem" }} color="info" />
                 <CircleIcon sx={{ fontSize: "0.7rem" }} color="error" />
               </Box>
-              <Typography color="white">/people/1</Typography>
+              <Typography color="white">/graphql</Typography>
               {loading ? <CircularProgress /> : <JSONPretty data={data} />}
             </Box>
           </Grid>

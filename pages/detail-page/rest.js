@@ -9,7 +9,7 @@ import JSONPretty from "react-json-pretty";
 // ** MUI Imports
 import { Box } from "@mui/system";
 import CircleIcon from "@mui/icons-material/Circle";
-import { CircularProgress, Grid, Typography } from "@mui/material";
+import { CircularProgress, Divider, Grid, Typography } from "@mui/material";
 
 import axios from "axios";
 
@@ -115,8 +115,79 @@ export default function RestPage() {
                   <CircularProgress />
                 ) : (
                   <Box>
-                    <Box>Movie: {films.title}</Box>
-                    <Box>Planet: {planets.name}</Box>
+                    <Box>
+                      <h3>Person</h3>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Gender:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {people.gender}
+                        </Typography>
+                      </div>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Name:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {people.name}
+                        </Typography>
+                      </div>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Height:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {people.height}
+                        </Typography>
+                      </div>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Mass:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {people.mass}
+                        </Typography>
+                      </div>
+                      <div>
+                        <Typography
+                          sx={{ display: "inline", color: "#374278" }}
+                        >
+                          Birth Year:
+                        </Typography>
+                        <Typography sx={{ display: "inline" }} ml={1}>
+                          {people.birthYear}
+                        </Typography>
+                      </div>
+                    </Box>
+                    <Divider sx={{ my: 2 }} />
+                    <Box>
+                      <h3>Movie</h3>
+                      <Typography sx={{ display: "inline", color: "#374278" }}>
+                        Title:
+                      </Typography>
+                      <Typography sx={{ display: "inline" }} ml={1}>
+                        {films.title}
+                      </Typography>
+                    </Box>
+                    <Divider sx={{ my: 2 }} />
+                    <Box>
+                      <h3>Planet</h3>
+                      <Typography sx={{ display: "inline", color: "#374278" }}>
+                        Name:
+                      </Typography>
+                      <Typography sx={{ display: "inline" }} ml={1}>
+                        {planets.name}
+                      </Typography>
+                    </Box>
                   </Box>
                 )}
               </Grid>
